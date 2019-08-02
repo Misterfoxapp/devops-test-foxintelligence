@@ -1,7 +1,8 @@
 package main
 
 import (
-	"bytes"
+        "context"
+    	"bytes"
 	"encoding/json"
 	"io"
 	"log"
@@ -39,7 +40,7 @@ func downloadFromS3(cfg aws.Config, key string) (string, error) {
 		Bucket: aws.String(os.Getenv("S3_BUCKET")),
 		Key:    aws.String(key),
 	})
-	res, err := req.Send()
+	res, err := req.Send(context.Background())
 	if err != nil {
 		return "", err
 	}
@@ -93,7 +94,7 @@ func init() {
 	req := s3Client.ListObjectsRequest(&s3.ListObjectsInput{
 		Bucket: aws.String(os.Getenv("S3_BUCKET")),
 	})
-	res, err := req.Send()
+	res, err := req.Send(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}
